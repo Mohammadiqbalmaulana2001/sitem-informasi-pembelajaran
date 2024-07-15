@@ -13,6 +13,8 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
+
+    
     /**
      * Display the login view.
      */
@@ -32,6 +34,13 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if(Auth::user()->hasRole('admin')) {
+            return redirect()->to(route('admin', absolute: false));
+        }
+        if(Auth::user()->hasRole('user')) {
+            return redirect()->to(route('welcome', absolute: false));
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
